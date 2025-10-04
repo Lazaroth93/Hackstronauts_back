@@ -1,100 +1,139 @@
+
 """
-Modelos Pydantic para NEOs (Near Earth Objects)
-Siguiendo principios SOLID - Responsabilidad única por modelo
+Modelos Pydantic para visualizaciones
+Define las estructuras de datos para las respuestas de visualización
 """
 
-from pydantic import BaseModel, Field
-from typing import List, Optional, Dict, Any
-from datetime import date, datetime
-from enum import Enum
+from pydantic import BaseModel
+from typing import List, Dict, Any, Optional
+from datetime import datetime
 
+class ChartData(BaseModel):
+    """Datos base para gráficos"""
+    x_axis: str
+    y_axis: str
+    points: List[Dict[str, Any]]
+    labels: Optional[List[str]] = None
 
-class RiskCategory(str, Enum):
-    """Categorías de riesgo para NEOs"""
-    VERY_LOW = "Muy Bajo"
-    LOW = "Bajo"
-    MODERATE = "Moderado"
-    HIGH = "Alto"
-    CRITICAL = "Crítico"
+class ChartConfig(BaseModel):
+    """Configuración de gráficos"""
+    color: str
+    width: int = 800
+    height: int = 600
+    chart_type: Optional[str] = None
 
+class OrbitalTrajectoryData(BaseModel):
+    """Datos de trayectoria orbital"""
+    time_points: List[float]  # Días desde ahora
+    distance_points: List[float]  # Distancia en UA
+    velocity_points: List[float]  # Velocidad en km/s
+    closest_approach: Optional[Dict[str, Any]] = None
 
-class NEOSearchQuery(BaseModel):
-    """Modelo para búsqueda de NEOs"""
-    query: str = Field(..., description="Término de búsqueda")
-    limit: int = Field(20, ge=1, le=100, description="Número máximo de resultados")
-    hazardous_only: bool = Field(False, description="Filtrar solo NEOs peligrosos")
-    min_diameter: Optional[float] = Field(None, ge=0, description="Diámetro mínimo en metros")
-    max_diameter: Optional[float] = Field(None, ge=0, description="Diámetro máximo en metros")
-    min_velocity: Optional[float] = Field(None, ge=0, description="Velocidad mínima en km/s")
-    max_velocity: Optional[float] = Field(None, ge=0, description="Velocidad máxima en km/s")
-
-
-class ImpactPredictionRequest(BaseModel):
-    """Modelo para solicitud de predicción de impacto"""
-    neo_id: str = Field(..., description="ID del NEO")
-    approach_date: Optional[date] = Field(None, description="Fecha de aproximación")
-    custom_velocity: Optional[float] = Field(None, ge=0, description="Velocidad personalizada en km/s")
-    custom_diameter: Optional[float] = Field(None, ge=0, description="Diámetro personalizado en metros")
-
-
-class HybridAnalysisRequest(BaseModel):
-    """Modelo para análisis híbrido de múltiples NEOs"""
-    neo_ids: List[str] = Field(..., min_items=1, description="Lista de IDs de NEOs")
-    analysis_type: str = Field("comprehensive", description="Tipo de análisis")
-
-
-class EmbeddingQuery(BaseModel):
-    """Modelo para consultas de búsqueda vectorial"""
-    embedding: List[float] = Field(..., description="Vector de embedding")
-    top_k: int = Field(5, ge=1, le=50, description="Número de resultados top")
-    source: Optional[str] = Field(None, description="Filtro por fuente")
-
-
-class NEOResponse(BaseModel):
-    """Modelo de respuesta para un NEO individual"""
+class OrbitalTrajectoryResponse(BaseModel):
+    """Respuesta de trayectoria orbital"""
     neo_id: str
+    neo_name: str
+    chart_type: str = "orbital_trajectory"
+    title: str
+    data: OrbitalTrajectoryData
+    config: ChartConfig
+    generated_at: datetime
+    confidence_score: Optional[float] = None
+
+class ImpactZone(BaseModel):
+    """Zona de impacto"""
+    zone_type: str  # "crater", "seismic", "tsunami", "thermal", "blast"
+    center_lat: float
+    center_lon: float
+    radius_km: float
+    severity: str  # "low", "medium", "high", "extreme"
+
+class ImpactMapData(BaseModel):
+    """Datos de mapa de impacto"""
+    center_lat: float
+    center_lon: float
+    zones: List[ImpactZone]
+    total_energy_mt: float
+    crater_diameter_km: float
+
+class ImpactMapResponse(BaseModel):
+    """Respuesta de mapa de impacto"""
+    neo_id: str
+    neo_name: str
+    chart_type: str = "impact_map"
+    title: str
+    data: ImpactMapData
+    config: Dict[str, Any]
+    generated_at: datetime
+    confidence_score: Optional[float] = None
+
+class ConfidenceMetric(BaseModel):
+    """Métrica de confianza individual"""
     name: str
-    close_approach_date: Optional[date]
-    miss_distance_km: Optional[float]
-    diameter_min_m: Optional[float]
-    diameter_max_m: Optional[float]
-    velocity_km_s: Optional[float]
-    is_potentially_hazardous: bool
-    risk_score: Optional[float]
-    risk_category: Optional[RiskCategory]
-    impact_energy_mt: Optional[float]
-    crater_diameter_km: Optional[float]
-    damage_radius_km: Optional[float]
+    value: float
+    max_value: float = 1.0
+    color: str
 
+class ConfidenceChartData(BaseModel):
+    """Datos de gráfico de confianza"""
+    categories: List[str]
+    values: List[float]
+    colors: List[str]
+    overall_confidence: float
 
-class NEOSListResponse(BaseModel):
-    """Modelo de respuesta para lista de NEOs con paginación"""
-    neos: List[NEOResponse]
-    pagination: Dict[str, Any]
-
-
-class DangerousNEOResponse(BaseModel):
-    """Modelo de respuesta para NEOs peligrosos"""
-    dangerous_neos: List[NEOResponse]
-    count: int
-
-
-class SearchResponse(BaseModel):
-    """Modelo de respuesta para búsqueda de NEOs"""
-    results: List[NEOResponse]
-    count: int
-    query: Dict[str, Any]
-
-
-class ApproachResponse(BaseModel):
-    """Modelo de respuesta para aproximaciones de un NEO"""
+class ConfidenceChartResponse(BaseModel):
+    """Respuesta de gráfico de confianza"""
     neo_id: str
-    approaches: List[Dict[str, Any]]
-    total_approaches: int
+    neo_name: str
+    chart_type: str = "confidence_chart"
+    title: str
+    data: ConfidenceChartData
+    config: ChartConfig
+    generated_at: datetime
 
+class RiskEvent(BaseModel):
+    """Evento de riesgo temporal"""
+    date: str
+    risk_level: str  # "low", "medium", "high", "extreme"
+    description: str
+    probability: float
 
-class UpcomingApproachesResponse(BaseModel):
-    """Modelo de respuesta para próximas aproximaciones"""
-    upcoming_approaches: List[NEOResponse]
-    count: int
-    days_ahead: int
+class RiskTimelineData(BaseModel):
+    """Datos de timeline de riesgo"""
+    events: List[RiskEvent]
+    risk_levels: List[Dict[str, Any]]
+    time_range_days: int
+
+class RiskTimelineResponse(BaseModel):
+    """Respuesta de timeline de riesgo"""
+    neo_id: str
+    neo_name: str
+    chart_type: str = "risk_timeline"
+    title: str
+    data: RiskTimelineData
+    config: Dict[str, Any]
+    generated_at: datetime
+
+class Orbit3DPoint(BaseModel):
+    """Punto 3D de órbita"""
+    x: float
+    y: float
+    z: float
+    time: float
+
+class Orbit3DData(BaseModel):
+    """Datos de órbita 3D"""
+    orbit_points: List[Orbit3DPoint]
+    earth_position: List[float]
+    asteroid_position: List[float]
+    camera_position: List[float]
+
+class Orbit3DResponse(BaseModel):
+    """Respuesta de órbita 3D"""
+    neo_id: str
+    neo_name: str
+    chart_type: str = "orbit_3d"
+    title: str
+    data: Orbit3DData
+    config: Dict[str, Any]
+    generated_at: datetime
