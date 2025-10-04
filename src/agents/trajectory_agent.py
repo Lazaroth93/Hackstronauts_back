@@ -1,6 +1,5 @@
 
-        
-       """
+"""
 TrajectoryAgent - Analiza trayectorias orbitales de asteroides.
 
 Funcionalidad:

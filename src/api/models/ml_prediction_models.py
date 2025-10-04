@@ -122,3 +122,96 @@ class VectorSearchResult(BaseModel):
 class VectorSearchResponse(BaseModel):
     """Respuesta de búsqueda vectorial"""
     results: List[VectorSearchResult] = Field(..., description="Resultados de la búsqueda")
+
+
+# Modelos para predicciones ML
+class TrajectoryPredictionResponse(BaseModel):
+    """Respuesta de predicción de trayectoria"""
+    neo_id: str = Field(..., description="ID del NEO")
+    prediction_date: datetime = Field(..., description="Fecha de la predicción")
+    future_positions: List[Dict[str, Any]] = Field(..., description="Posiciones futuras predichas")
+    confidence_score: float = Field(..., description="Puntuación de confianza")
+    prediction_horizon_days: int = Field(..., description="Horizonte de predicción en días")
+
+
+class RiskEvolutionResponse(BaseModel):
+    """Respuesta de evolución de riesgo"""
+    neo_id: str = Field(..., description="ID del NEO")
+    analysis_date: datetime = Field(..., description="Fecha del análisis")
+    risk_timeline: List[Dict[str, Any]] = Field(..., description="Línea de tiempo del riesgo")
+    peak_risk_date: str = Field(..., description="Fecha de mayor riesgo")
+    peak_risk_score: float = Field(..., description="Puntuación máxima de riesgo")
+
+
+class ImpactProbabilityResponse(BaseModel):
+    """Respuesta de probabilidad de impacto"""
+    neo_id: str = Field(..., description="ID del NEO")
+    prediction_date: datetime = Field(..., description="Fecha de la predicción")
+    impact_probability: float = Field(..., description="Probabilidad de impacto")
+    impact_date_range: Dict[str, str] = Field(..., description="Rango de fechas de impacto")
+    confidence_interval: Dict[str, float] = Field(..., description="Intervalo de confianza")
+
+
+class HistoricalAnalysisResponse(BaseModel):
+    """Respuesta de análisis histórico"""
+    neo_id: str = Field(..., description="ID del NEO")
+    analysis_date: datetime = Field(..., description="Fecha del análisis")
+    historical_approaches: List[Dict[str, Any]] = Field(..., description="Aproximaciones históricas")
+    risk_trend: str = Field(..., description="Tendencia del riesgo")
+    pattern_analysis: str = Field(..., description="Análisis de patrones")
+
+
+class ModelConfidenceResponse(BaseModel):
+    """Respuesta de confianza del modelo"""
+    neo_id: str = Field(..., description="ID del NEO")
+    analysis_date: datetime = Field(..., description="Fecha del análisis")
+    model_accuracy: float = Field(..., description="Precisión del modelo")
+    prediction_confidence: float = Field(..., description="Confianza de la predicción")
+    data_quality_score: float = Field(..., description="Puntuación de calidad de datos")
+
+
+class CompleteMLPredictionResponse(BaseModel):
+    """Respuesta completa de predicción ML"""
+    neo_id: str = Field(..., description="ID del NEO")
+    prediction_date: datetime = Field(..., description="Fecha de la predicción")
+    trajectory_prediction: TrajectoryPredictionResponse = Field(..., description="Predicción de trayectoria")
+    risk_evolution: RiskEvolutionResponse = Field(..., description="Evolución del riesgo")
+    impact_probability: ImpactProbabilityResponse = Field(..., description="Probabilidad de impacto")
+    historical_analysis: HistoricalAnalysisResponse = Field(..., description="Análisis histórico")
+    model_confidence: ModelConfidenceResponse = Field(..., description="Confianza del modelo")
+
+
+# Modelos de respuesta API
+class TrajectoryPredictionAPIResponse(BaseModel):
+    """Respuesta API de predicción de trayectoria"""
+    success: bool = Field(..., description="Indica si la operación fue exitosa")
+    message: str = Field(..., description="Mensaje de respuesta")
+    data: TrajectoryPredictionResponse = Field(..., description="Datos de la predicción")
+
+
+class RiskEvolutionAPIResponse(BaseModel):
+    """Respuesta API de evolución de riesgo"""
+    success: bool = Field(..., description="Indica si la operación fue exitosa")
+    message: str = Field(..., description="Mensaje de respuesta")
+    data: RiskEvolutionResponse = Field(..., description="Datos de evolución de riesgo")
+
+
+class ImpactProbabilityAPIResponse(BaseModel):
+    """Respuesta API de probabilidad de impacto"""
+    success: bool = Field(..., description="Indica si la operación fue exitosa")
+    message: str = Field(..., description="Mensaje de respuesta")
+    data: ImpactProbabilityResponse = Field(..., description="Datos de probabilidad de impacto")
+
+
+class HistoricalAnalysisAPIResponse(BaseModel):
+    """Respuesta API de análisis histórico"""
+    success: bool = Field(..., description="Indica si la operación fue exitosa")
+    message: str = Field(..., description="Mensaje de respuesta")
+    data: HistoricalAnalysisResponse = Field(..., description="Datos de análisis histórico")
+
+
+class ModelConfidenceAPIResponse(BaseModel):
+    """Respuesta API de confianza del modelo"""
+    success: bool = Field(..., description="Indica si la operación fue exitosa")
+    message: str = Field(..., description="Mensaje de respuesta")
+    data: ModelConfidenceResponse = Field(..., description="Datos de confianza del modelo")

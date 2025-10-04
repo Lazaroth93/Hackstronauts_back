@@ -7,7 +7,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from typing import Dict, Any, Optional
 from pydantic import BaseModel
 
-from ...graphs.graph_agents import AgentGraph
+from ...graphs.graph_agent import AgentGraph
 from ...supervisors.hybrid_supervisor import HybridSupervisor
 
 # Crear el router para simulación

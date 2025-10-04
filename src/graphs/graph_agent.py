@@ -16,7 +16,7 @@ from ..agents.impact_analyzer import ImpactAnalyzerAgent
 from ..agents.mitigation_agent import MitigationAgent
 from ..agents.visualization_agent import VisualizationAgent
 from ..agents.explainer_agent import ExplainerAgent
-from ..agents.ml_predictor_agent import MLPredictorAgent
+from ..agents.ml_predictor import MLPredictorAgent
 from ..supervisors.hybrid_supervisor import HybridSupervisor
 
 

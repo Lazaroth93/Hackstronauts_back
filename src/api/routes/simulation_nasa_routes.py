@@ -9,7 +9,7 @@ from pydantic import BaseModel
 from datetime import datetime
 
 from ...services.nasa_service import nasa_service
-from ...graphs.graph_agents import AgentGraph
+from ...graphs.graph_agent import AgentGraph
 from ...supervisors.hybrid_supervisor import HybridSupervisor
 
 # Crear el router para simulación NASA
