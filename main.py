@@ -106,7 +106,7 @@ def start_system():
     """Función para iniciar el sistema."""
     host = os.getenv("API_HOST", "0.0.0.0")
     port = int(os.getenv("API_PORT", "8000"))
-    debug = os.getenv("DEBUG", "True").lower() == "true"
+    debug = os.getenv("DEBUG", "False").lower() == "true"
     
     print(f"🌐 Iniciando servidor en http://{host}:{port}")
     print(f"🔧 Modo debug: {debug}")
