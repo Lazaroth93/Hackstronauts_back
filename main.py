@@ -16,6 +16,7 @@ load_dotenv()
 
 # Importar componentes del sistema
 from src.api.routes import router as api_router
+from src.api.routes.explanation_routes import explanation_router
 from src.database.postgres_connector import PostgreSQLConnector
 from src.supervisors.hybrid_supervisor import HybridSupervisor
 
@@ -69,13 +70,17 @@ async def lifespan(app: FastAPI):
     # Cleanup al cerrar
     print("🛑 Cerrando Hackstronauts...")
     if db_connector:
-        await db_connector.close()
+        try:
+            await db_connector.close()
+        except:
+            pass  # Ignorar errores de cierre
 
 # Asignar lifespan a la app
 app.router.lifespan_context = lifespan
 
 # Incluir rutas de la API
 app.include_router(api_router, prefix="/api/v1")
+app.include_router(explanation_router, prefix="/api/v1")
 
 @app.get("/")
 async def root():

@@ -17,5 +17,8 @@ psycopg2-binary==2.9.9
 # Environment
 python-dotenv==1.0.0
 
+# PDF Generation
+reportlab==4.0.4
+
 # Development
 pytest==7.4.3
