@@ -11,9 +11,7 @@ langchain-core
 # HTTP Client
 httpx==0.25.2
 
-# Database
-psycopg2-binary==2.9.9
-# Alternative for deployment
+# Database - Use psycopg2 instead of psycopg2-binary for Render
 psycopg2==2.9.9
 
 # Environment
