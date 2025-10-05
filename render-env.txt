@@ -1,0 +1,25 @@
+# Variables de entorno para Render
+# Copia estas variables en Render Dashboard
+
+API_HOST=0.0.0.0
+API_PORT=$PORT
+DEBUG=False
+ENVIRONMENT=production
+DATABASE_URL=postgresql://username:password@localhost:5432/hackstronauts_db
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=hackstronauts_db
+DB_USER=postgres
+DB_PASSWORD=password
+NASA_API_KEY=DEMO_KEY
+LANGCHAIN_API_KEY=your_langchain_api_key_here
+LANGCHAIN_TRACING_V2=true
+LANGCHAIN_ENDPOINT=https://api.smith.langchain.com
+SECRET_KEY=your_secret_key_here_change_in_production
+LOG_LEVEL=INFO
+LOG_FILE=logs/hackstronauts.log
+MAX_RETRIES=3
+TIMEOUT_SECONDS=30
+BATCH_SIZE=100
+PLOTLY_THEME=plotly_dark
+MATPLOTLIB_STYLE=dark_background

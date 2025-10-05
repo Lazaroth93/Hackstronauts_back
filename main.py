@@ -14,6 +14,13 @@ from dotenv import load_dotenv
 # Cargar variables de entorno
 load_dotenv()
 
+# Configurar variables de entorno para Render
+try:
+    from setup_env import setup_render_env
+    setup_render_env()
+except ImportError:
+    pass  # No es crítico si no se puede importar
+
 # Importar componentes del sistema
 from src.api.routes import router as api_router
 from src.api.routes.explanation_routes import explanation_router
